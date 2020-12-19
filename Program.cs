@@ -1,208 +1,104 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ConsoleApp5
-{
-    class Program
-    {  //took help in this program from classmates 
-        static void Main(string[] args)
+namespace ConsoleApp3
+{class Program
+    {
+        static void angryProfessor(int threshold, int[] student)
         {
-            Program program = new Program();
-            int[] arrLen = { }, a = { }, b = { };
-            int aLen, bLen, total;
-            try
+
+
+            for (int i = 0; i < n; i++)
             {
-                //Console.WriteLine("Enter array length");
-                arrLen = program.ParseAndValidateLine(Console.ReadLine(), 2).ToArray();
-                aLen = arrLen[0];
-                bLen = arrLen[1];
-                program.validateArrayLength(aLen, bLen);
-
-                //Console.WriteLine("Enter array 'a': ");
-                a = program.ParseAndValidateLine(Console.ReadLine(), aLen).ToArray();
-                //Console.WriteLine("Enter array 'b': ");
-                b = program.ParseAndValidateLine(Console.ReadLine(), bLen).ToArray();
-
-                total = program.getTotalX(a, b);
-                Console.WriteLine(total);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-        }
-
-
-
-        private int getTotalX(int[] a, int[] b)
-        {
-            int startIdx, endIdx, num;
-            List<int> aLst = new List<int>(a);
-            List<int> bLst = new List<int>(b);
-            List<int> numList = new List<int>();
-            aLst.Sort();
-            bLst.Sort();
-            startIdx = aLst[aLst.Count - 1];
-            endIdx = bLst[0];
-            for (num = startIdx; num <= endIdx; num++)
-            {
-                numList.Add(num);
-            }
-            numList = findNumMatchingA(numList, aLst);
-            numList = findNumMatchingB(numList, bLst);
-
-            return numList.Count;
-        }
-
-        private List<int> findNumMatchingA(List<int> numList, List<int> aLst)
-        {
-            List<int> newNumLst = new List<int>();
-            foreach (int num in numList)
-            {
-                if (HasAllFactors(num, aLst))
+                if (student[i] <= 0 && student[i] > -100)
                 {
-                    newNumLst.Add(num);
+                    arrivalTime += 1;
                 }
-            }
-            return newNumLst;
-        }
 
-        private List<int> findNumMatchingB(List<int> numList, List<int> bLst)
-        {
-            List<int> newNumLst = new List<int>();
-            foreach (int num in numList)
-            {
-                if (IsFactorOf(bLst, num))
+                else if (student[i] > 0 && student[i] <= 100)
                 {
-                    newNumLst.Add(num);
-                }
-            }
-            return newNumLst;
-        }
-
-        private bool IsFactorOf(List<int> bLst, int num)
-        {
-            List<int> factorLst = new List<int>();
-            foreach (int bItem in bLst)
-            {
-                factorLst = getFactors(bItem);
-                if (!factorLst.Contains(num))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        private List<int> getFactors(int num)
-        {
-            List<int> factorLst = new List<int>();
-            for (int idx = 1; idx <= num; idx++)
-            {
-                if (num % idx == 0)
-                {
-                    factorLst.Add(idx);
-                }
-            }
-            return factorLst;
-        }
-
-        private bool HasAllFactors(int num, List<int> aLst)
-        {
-            List<int> factorLst = getFactors(num);
-
-            foreach (int item in aLst)
-            {
-                if (!factorLst.Contains(item))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        private void validateArrayLength(int aLen, int bLen)
-        {
-            if (aLen < 1 || aLen > 10)
-            {
-                throw new ArrayLengthException();
-            }
-            if (bLen < 1 || bLen > 10)
-            {
-                throw new ArrayLengthException();
-            }
-        }
-        private List<int> ParseAndValidateLine(string line, int excepted)
-        {
-            List<int> arrLst = ParseLine(line);
-            if (arrLst.Count != excepted)
-            {
-                throw new InputLengthException(excepted, arrLst.Count);
-            }
-            return arrLst;
-        }
-        private List<int> ParseLine(string line)
-        {
-            int outputVal = 0;
-            bool isNumber = false;
-            List<int> outputList = new List<int>();
-            string[] words = line.Split(" ");
-            foreach (string word in words)
-            {
-                isNumber = int.TryParse(word, out outputVal);
-                if (!isNumber)
-                {
-                    throw new InvalidDataException(line);
-                }
-                else if (outputVal < 1 || outputVal > 100)
-                {
-                    throw new InvalidValueException();
+                    arrivalTime += 0;
                 }
                 else
                 {
-                    outputList.Add(outputVal);
+                    Console.WriteLine("arrival time can't be less than -100 or more than 100");
                 }
             }
-            return outputList;
-        }
-    }
+            if (arrivalTime <= k)
+            {
 
-    public class ArrayLengthException : Exception
-    {
-        public ArrayLengthException() :
-            base("Array length should be between 1 and 10")
+                res.Add("Yes");
+            }
+            else
+            {
+                res.Add("No");
+            }
+        }
+        //The first line has two space-separated integers, n and k,
+        static int n,k,arrivalTime;
+        static List<string> res = new List<string>();
+
+        static void Main(string[] args)
         {
+            Console.WriteLine("Number of test cases:");
+            // The first line of input contains t, the number of test cases.
+            int t = Convert.ToInt32(Console.ReadLine());
+            
+            if (t >= 1 && t <= 10)
+            {
+                for (int i = 0; i < t; i++)
+                {
+                    //Second Constraint
+                    Console.WriteLine("Number of students:");
+                    string[] students = Console.ReadLine().Split(' ');
+                    n = Convert.ToInt32(students[0]);
+                    k = Convert.ToInt32(students[1]);
+                    if (n >= 1 && n <= 1000)
+                    {
+                        if (k >= 1 && k <= n)
+                        {
+                            Console.WriteLine("Arrival times of students:");
+                            string[] temp = Console.ReadLine().Split(' ');
+                            int[] a = Array.ConvertAll(temp, Int32.Parse);
 
+                            if (a.Length == n)
+                            {
+                                angryProfessor(k, a);
+                            }
+                            // Condition that states if a != n
+                            else
+                            {
+                                Console.WriteLine("Number of students should be equal to n");
+                            }
+                        }
+                        //For invalid value of k
+                        else 
+                        {
+                            Console.WriteLine("Invalid Threshold number. The value should be in range " + n);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Number of Students should be within range");
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid number of test cases, value should be between 1 and 10");
+            }
+
+            Console.WriteLine("Is class cancelled?");
+            foreach (string i in res)
+            {
+                Console.WriteLine(i);
+            }
         }
+        //angryProfessor function It must return YES if class is cancelled, or NO otherwise
+       
+
+
     }
-
-    public class InvalidValueException : Exception
-    {
-        public InvalidValueException() :
-            base("Value should be between 1 and 100")
-        {
-
-        }
-    }
-
-    public class InputLengthException : Exception
-    {
-        public InputLengthException(int excepted, int actual) :
-            base($"Excepted input {excepted}, Actual input {actual}")
-        {
-
-        }
-    }
-
-    public class InvalidDataException : Exception
-    {
-        public InvalidDataException(string data) :
-            base($"Invalid data: {data}")
-        {
-
-        }
-
 }
-    }
-
